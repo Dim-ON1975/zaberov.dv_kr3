@@ -28,16 +28,16 @@ def select_executed(operations: list) -> list:
     """
     list_executed = []
     for value in operations:
-        if value['state'] == 'EXECUTED':
+        if value.get('state') == 'EXECUTED':
             list_executed.append(value)
     return list_executed
 
 
-def main():
+def main() -> None:
     """
     Основной код программы
     """
     # содержимое файла
     content = load_json(PATH_OPERATIONS)
     # список словарей выполненных операций
-    executed_list = select_executed(content)
+    exec_list = select_executed(content)
