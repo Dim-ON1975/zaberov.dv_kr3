@@ -9,7 +9,7 @@ def test_load_json(array_fixture: list):
     Проверяем загружаются ли все значения из файла.
     Проверяем совпадает ли количество значений EXECUTED c ожидаемым.
     Проверяем совпадает ли количество значений CANCELED с ожидаемым.
-    :return: ошибки, если они имеются.
+    :return: Ошибки, если они имеются.
     """
     # Количество словарей всего
     assert len(array_fixture) == 8
@@ -32,13 +32,13 @@ def test_load_json(array_fixture: list):
      '2018-08-19 04:27:37.904916',
      '2018-01-26 15:40:13.413061',
      '2018-11-29 07:18:23.941293',
-     '2018-12-22 02:02:49.564873',
+     '2019-04-04 23:20:05.206878',
      '2019-05-19 12:51:49.023880']
 ])
 def test_select_executed(array_fixture: list, date_str: list):
     """
     Тестирование формирования списка словарей выполненных операций (EXECUTED)
-    :return: ошибки, если они имеются.
+    :return: Ошибки, если они имеются.
     """
     assert len(select_executed(array_fixture)) == 6
     test_list = select_executed(array_fixture)
@@ -50,7 +50,7 @@ def test_list_sort(array_fixture: list):
     """
     Тестирование сортировки списка словарей по дате и времени
     :param array_fixture: несортированный список, lst
-    :return: ошибки, если они имеются.
+    :return: Ошибки, если они имеются.
     """
     assert list_sort(select_executed(array_fixture)) == [
         {
@@ -69,19 +69,19 @@ def test_list_sort(array_fixture: list):
             "to": "Счет 58518872592028002662"
         },
         {
-            "id": 490100847,
+            "id": 142264268,
             "state": "EXECUTED",
-            "date": "2018-12-22 02:02:49.564873",
+            "date": "2019-04-04 23:20:05.206878",
             "operationAmount": {
-                "amount": "56516.63",
+                "amount": "79114.93",
                 "currency": {
                     "name": "USD",
                     "code": "USD"
                 }
             },
-            "description": "Перевод с карты на карту",
-            "from": "Visa Gold 8326537236216459",
-            "to": "MasterCard 6783917276771847"
+            "description": "Перевод со счета на счет",
+            "from": "Счет 19708645243227258542",
+            "to": "Счет 75651667383060284188"
         },
         {
             "id": 518707726,
@@ -142,13 +142,12 @@ def test_list_sort(array_fixture: list):
             "from": "Maestro 4598300720424501",
             "to": "Счет 43597928997568165086"
         }
-
     ]
 
 
 def test_main():
     """
     Тест функции, которая не возвращает значений посредством return
-    :return: ошибки, если они имеются.
+    :return: Ошибки, если они имеются.
     """
     assert main() is None
