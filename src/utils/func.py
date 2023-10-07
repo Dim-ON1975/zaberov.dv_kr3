@@ -2,7 +2,7 @@
 import json
 from datetime import datetime
 
-from src.utils.constants import PATH_OPERATIONS
+from src.utils.constants import PATH_OPERATIONS, NUMBER_TRANSACTIONS_DISPLAYED
 from src.utils.operation_class import Operation
 
 
@@ -22,20 +22,12 @@ def load_json(path_json: str) -> list:
 
 def select_executed(operations: list) -> list:
     """
-    Возвращает список словарей с выполненными операциями.
+    Возвращает, сортированный по датам и времени, список словарей с выполненными операциями.
     :param operations: Список словарей всех операций, list
     :return: Список словарей выполненных операций, list
     """
-    list_executed = []
-    for value in operations:
-        if value.get('state') == 'EXECUTED':
-            # Заменяем в строке с датой и временем T на пробел
-            date_time = value.get('date').replace('T', ' ')
-            value['date'] = date_time
-            list_executed.append(value)
-    # Сортируем список
-    list_executed = list_sort(list_executed)
-    return list_executed
+    list_executed = [value for value in operations if value.get('state') == 'EXECUTED']
+    return list_sort(list_executed)
 
 
 def list_sort(list_operations: list) -> list:
@@ -47,9 +39,29 @@ def list_sort(list_operations: list) -> list:
     """
     # Сортируем словари в списке по дате и времени в обратном порядке
     list_operations = sorted(list_operations,
-                             key=lambda x: datetime.strptime(x['date'], '%Y-%m-%d %H:%M:%S.%f'),
+                             key=lambda x: datetime.strptime(x['date'], '%Y-%m-%dT%H:%M:%S.%f'),
                              reverse=True)
     return list_operations
+
+
+def print_operations(list_dict: list, number_operations: int) -> None:
+    """
+    Выводит на экран информацию о последних операциях
+    :param list_dict: Список словарей, list
+    :param number_operations: Количество отображаемых операций, int
+    :return: Ничего не возвращает. Выводит на экран список последних операций
+    """
+    # Извлекаем из словарей необходимую информацию, выводя ее на экран
+    for dict_operation in list_dict[0:number_operations]:
+        # создаём экземпляр класса Operation
+        operation = Operation(dict_operation)
+
+        # Вывод данных на экран
+        print(
+            f'{operation.date_formatted} {operation.description_print}\n'
+            f'{operation.from_to()}\n'
+            f'{operation.amount_transfer}\n'
+        )
 
 
 def main() -> None:
@@ -61,12 +73,5 @@ def main() -> None:
     # список словарей выполненных операций
     exec_list = select_executed(content)
 
-    # Извлекаем из словарей необходимую информацию, выводя ее на экран
-    for dict_operation in exec_list[0:5]:
-        # создаём экземпляр класса Operation
-        operation = Operation(dict_operation)
-
-        # Вывод данных на экран
-        print(
-            f'{operation.date_formatted}'
-        )
+    # вывод данных на экран
+    print_operations(exec_list, NUMBER_TRANSACTIONS_DISPLAYED)
